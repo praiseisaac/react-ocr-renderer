@@ -1,0 +1,28 @@
+.overlayContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pageContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.textractBlock {
+  font-size: 14px;
+  border: 1px solid red;
+  position: absolute;
+}
+
+.textractPage {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
