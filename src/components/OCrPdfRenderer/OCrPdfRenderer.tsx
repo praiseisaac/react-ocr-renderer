@@ -85,7 +85,15 @@ const OCRPdfRenderer = ({
           />
           <div className={styles.overlayContent}>
             <div className={styles.ocrPage}>
-              {ocrData[i + 1]?.map((block) => <RenderText key={block.Id} {...block} width={width} height={height} />)}
+              {ocrData[i + 1]?.map((block) => (
+                <div key={block.Id} style={{
+                  left: `${block.Geometry.BoundingBox.Left * width}px`,
+                  top: `${block.Geometry.BoundingBox.Top * height}px`,
+                  position: 'absolute',
+                }}>
+                  <RenderText {...block} width={width} height={height} />
+                </div>
+              ))}
             </div>
           </div>
         </div>

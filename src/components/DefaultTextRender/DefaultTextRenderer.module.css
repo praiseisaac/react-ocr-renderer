@@ -1,6 +1,5 @@
 .defaultRenderText {
   background-color: rgba(0, 0, 0, 1);
-  position: absolute;
   border-radius: 5px;
   color: #fff;
   cursor: pointer;

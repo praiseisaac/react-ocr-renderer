@@ -55,6 +55,8 @@ class Example extends Component {
 }
 ```
 
+## [To-Dos](https://praisedaramola.notion.site/ReactOCRRenderer-4d8b93487d0b438ca4d0a406158c819c)
+
 ## License
 
 MIT © [praiseisaac](https://github.com/praiseisaac)

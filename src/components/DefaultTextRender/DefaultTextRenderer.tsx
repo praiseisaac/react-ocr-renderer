@@ -12,8 +12,6 @@ const DefaultTextRenderer = ({
       key={block.Id}
       className={styles.defaultRenderText}
       style={{
-        left: `${block.Geometry.BoundingBox.Left * width}px`,
-        top: `${block.Geometry.BoundingBox.Top * height}px`,
         width: `${block.Geometry.BoundingBox.Width * width}px`,
         height: `${block.Geometry.BoundingBox.Height * height}px`,
         fontSize: `calc(${block.Geometry.BoundingBox.Height * height}px * 0.8)`,
