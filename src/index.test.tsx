@@ -1,7 +1,7 @@
-import ReactTextractRenderer from './ReactTextractRenderer'
+import ReactOCRRenderer from './ReactOCRRenderer'
 
 describe('ExampleComponent', () => {
   it('is truthy', () => {
-    expect(ReactTextractRenderer).toBeTruthy()
+    expect(ReactOCRRenderer).toBeTruthy()
   })
 })

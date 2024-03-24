@@ -2,7 +2,7 @@ export enum FileType {
   PDF = 'pdf'
 }
 
-export type TextractBlock = {
+export type OCRBlock = {
   BlockType: BlockType
   Geometry: {
     BoundingBox: {
@@ -35,7 +35,7 @@ export enum BlockType {
   SELECTION_ELEMENT = 'SELECTION_ELEMENT'
 }
 
-export type TextractBlockRenderProps = TextractBlock & {
+export type OCRBlockRenderProps = OCRBlock & {
   width: number;
   height: number;
 }

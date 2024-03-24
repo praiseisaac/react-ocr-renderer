@@ -1,12 +1,12 @@
 import React from 'react'
 import styles from './DefaultTextRenderer.module.css'
-import { TextractBlockRenderProps } from '../../ReactTextractRenderer.types'
+import { OCRBlockRenderProps } from '../../ReactOCRRenderer.types'
 
 const DefaultTextRenderer = ({
   width,
   height,
   ...block
-}: TextractBlockRenderProps) => {
+}: OCRBlockRenderProps) => {
   return (
     <div
       key={block.Id}

@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { pdfjs, Document, Page } from 'react-pdf'
-import styles from './TextractPdfRenderer.module.css'
-import { TextractBlock, TextractBlockRenderProps } from '../../ReactTextractRenderer.types'
+import styles from './OCRPdfRenderer.module.css'
 import DefaultTextRenderer from '../DefaultTextRender/DefaultTextRenderer';
+import { OCRBlock, OCRBlockRenderProps } from '../../ReactOCRRenderer.types';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 
-const TextractPdfRenderer = ({
+const OCRPdfRenderer = ({
   file,
-  textractData,
+  ocrData,
   customRenderComponent
 }: {
   file: string
-  textractData: {
-    [key: number]: TextractBlock[]
+  ocrData: {
+    [key: number]: OCRBlock[]
   },
-  customRenderComponent?: (props: TextractBlockRenderProps) => JSX.Element
+  customRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element
 }) => {
   const [pages, setPages] = useState<string[]>([])
   const [{ width, height }, setPageSize] = useState<{
@@ -84,8 +84,8 @@ const TextractPdfRenderer = ({
             renderAnnotationLayer={false}
           />
           <div className={styles.overlayContent}>
-            <div className={styles.textractPage}>
-              {textractData[i + 1]?.map((block) => <RenderText key={block.Id} {...block} width={width} height={height} />)}
+            <div className={styles.ocrPage}>
+              {ocrData[i + 1]?.map((block) => <RenderText key={block.Id} {...block} width={width} height={height} />)}
             </div>
           </div>
         </div>
@@ -94,4 +94,4 @@ const TextractPdfRenderer = ({
   )
 }
 
-export default TextractPdfRenderer
+export default OCRPdfRenderer

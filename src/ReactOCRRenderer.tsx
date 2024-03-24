@@ -2,14 +2,14 @@ import React, { useMemo } from "react";
 import {
   BlockType,
   FileType,
-  TextractBlock,
-  TextractBlockRenderProps,
-} from "./ReactTextractRenderer.types";
-import TextractPdfRenderer from './components/TextractPdfRenderer/TextractPdfRenderer';
+  OCRBlock,
+  OCRBlockRenderProps,
+} from "./ReactOCRRenderer.types";
+import OCRPdfRenderer from './components/OCrPdfRenderer/OCrPdfRenderer';
 
-const groupPages = (blocks: TextractBlock[]) => {
+const groupPages = (blocks: OCRBlock[]) => {
   const pages: {
-    [key: number]: TextractBlock[];
+    [key: number]: OCRBlock[];
   } = {};
 
   blocks.forEach((block) => {
@@ -20,25 +20,25 @@ const groupPages = (blocks: TextractBlock[]) => {
   return pages;
 };
 
-const ReactTextractRenderer = ({
+const ReactOCRRenderer = ({
   file,
   type,
-  textractJson,
+  ocrJson,
   searchText = [],
   highlightedBlockTypes = [BlockType.WORD],
   customRenderComponent
 }:  {
   file: string;
   type: FileType;
-  textractJson: {
-    Blocks: TextractBlock[];
+  ocrJson: {
+    Blocks: OCRBlock[];
     DocumentMetadata: {
       Pages: number;
     };
   };
   searchText?: string[] | string;
     highlightedBlockTypes?: BlockType[];
-    customRenderComponent?: (props: TextractBlockRenderProps) => JSX.Element;
+    customRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element;
 }) => {
   const cleanedSearchText = useMemo(
     () =>
@@ -50,7 +50,7 @@ const ReactTextractRenderer = ({
 
   const filteredBlocks = useMemo(
     () =>
-      textractJson.Blocks.filter((block) => {
+      ocrJson.Blocks.filter((block) => {
         if (!highlightedBlockTypes.includes(block.BlockType)) {
           return false;
         }
@@ -68,16 +68,16 @@ const ReactTextractRenderer = ({
 
         return true;
       }),
-    [textractJson, cleanedSearchText, highlightedBlockTypes],
+    [ocrJson, cleanedSearchText, highlightedBlockTypes],
   );
 
   if (type === FileType.PDF) {
     const pageGroups = groupPages(filteredBlocks);
 
     return (
-      <TextractPdfRenderer
+      <OCRPdfRenderer
         file={file}
-        textractData={pageGroups}
+        ocrData={pageGroups}
         customRenderComponent={customRenderComponent}
       />
     );
@@ -86,4 +86,4 @@ const ReactTextractRenderer = ({
   return <div>{file}</div>;
 };
 
-export default ReactTextractRenderer;
+export default ReactOCRRenderer;

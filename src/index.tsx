@@ -1,5 +1,5 @@
-import ReactTextractRenderer from './ReactTextractRenderer';
+import ReactOCRRenderer from './ReactOCRRenderer';
 
-export default ReactTextractRenderer;
+export default ReactOCRRenderer;
 
-export * from './ReactTextractRenderer.types';
+export * from './ReactOCRRenderer.types';

@@ -1,13 +1,13 @@
-# react-textract-renderer
+# react-ocr-renderer
 
 > Made with create-react-library
 
-[![NPM](https://img.shields.io/npm/v/react-textract-renderer.svg)](https://www.npmjs.com/package/react-textract-renderer) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/react-ocr-renderer.svg)](https://www.npmjs.com/package/react-ocr-renderer) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
 ```bash
-npm install --save react-textract-renderer
+npm install --save react-ocr-renderer
 ```
 
 ## Usage
@@ -15,16 +15,16 @@ npm install --save react-textract-renderer
 ```tsx
 import React, { Component } from 'react'
 
-import ReactTextractRenderer, { FileType, BlockType } from 'react-textract-renderer'
-import 'react-textract-renderer/dist/index.css'
+import ReactOCRRenderer, { FileType, BlockType } from 'react-ocr-renderer'
+import 'react-ocr-renderer/dist/index.css'
 
 class Example extends Component {
   render() {
-    return <ReactTextractRenderer
+    return <ReactOCRRenderer
       file="path/to/file"
       type={FileType.PDF}
-      textractJson={
-        textractJson
+      ocrJson={
+        ocrJson
       }
       highlightedBlockTypes={[BlockType.LINE]}
     />
@@ -36,16 +36,16 @@ If you want to perform a search, you can add the `searchText` prop as a string o
 ```tsx
 import React, { Component } from 'react'
 
-import ReactTextractRenderer, { FileType, BlockType } from 'react-textract-renderer'
-import 'react-textract-renderer/dist/index.css'
+import ReactOCRRenderer, { FileType, BlockType } from 'react-ocr-renderer'
+import 'react-ocr-renderer/dist/index.css'
 
 class Example extends Component {
   render() {
-    return <ReactTextractRenderer
+    return <ReactOCRRenderer
       file="path/to/file"
       type={FileType.PDF}
-      textractJson={
-        textractJson
+      ocrJson={
+        ocrJson
       }
       highlightedBlockTypes={[BlockType.LINE]}
       searchText={"test to search"}
