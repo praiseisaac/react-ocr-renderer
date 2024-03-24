@@ -15,13 +15,13 @@ npm install --save react-textract-renderer
 ```tsx
 import React, { Component } from 'react'
 
-import ReactTextractRenderer from 'react-textract-renderer'
+import ReactTextractRenderer, { FileType, BlockType } from 'react-textract-renderer'
 import 'react-textract-renderer/dist/index.css'
 
 class Example extends Component {
   render() {
     return <ReactTextractRenderer
-      file="./Mt Creek Trail Contract.pdf"
+      file="path/to/file"
       type={FileType.PDF}
       textractJson={
         textractJson
@@ -42,7 +42,7 @@ import 'react-textract-renderer/dist/index.css'
 class Example extends Component {
   render() {
     return <ReactTextractRenderer
-      file="./Mt Creek Trail Contract.pdf"
+      file="path/to/file"
       type={FileType.PDF}
       textractJson={
         textractJson
