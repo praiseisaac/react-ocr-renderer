@@ -4,9 +4,10 @@ import {
   FileType,
   OCRBlock,
   OCRBlockRenderProps,
+  OCRPageRenderProps,
   OcrData
 } from './ReactOCRRenderer.types'
-import OCRPdfRenderer from './components/OCrPdfRenderer/OCrPdfRenderer'
+import OCRPdfRenderer from './components/OCRPdfRenderer/OCRPdfRenderer'
 
 const groupPages = (blocks: OCRBlock[]) => {
   const pages: {
@@ -27,14 +28,23 @@ const ReactOCRRenderer = ({
   ocrData,
   searchText = [],
   highlightedBlockTypes = [BlockType.WORD],
-  customRenderComponent
+  customTextRenderComponent,
+  customPageRenderComponent,
+  size,
+  showOnlyResultPages
 }: {
   file: string
   type: FileType
   ocrData: OcrData
   searchText?: string[] | string
   highlightedBlockTypes?: BlockType[]
-  customRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element
+  customTextRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element
+  customPageRenderComponent?: (props: OCRPageRenderProps) => JSX.Element
+  size?: {
+    width: number
+    height?: number
+  }
+  showOnlyResultPages?: boolean
 }) => {
   const cleanedSearchText = useMemo(
     () =>
@@ -67,14 +77,21 @@ const ReactOCRRenderer = ({
     [ocrData, cleanedSearchText, highlightedBlockTypes]
   )
 
-  if (type === FileType.PDF) {
-    const pageGroups = groupPages(filteredBlocks)
+  const pageGroups = useMemo(() => groupPages(filteredBlocks), [filteredBlocks])
 
+  if (!Object.keys(pageGroups).length) {
+    return <div>No data found</div>
+  }
+
+  if (type === FileType.PDF) {
     return (
       <OCRPdfRenderer
         file={file}
         ocrData={pageGroups}
-        customRenderComponent={customRenderComponent}
+        customTextRenderComponent={customTextRenderComponent}
+        customPageRenderComponent={customPageRenderComponent}
+        size={size}
+        showOnlyResultPages={showOnlyResultPages}
       />
     )
   }

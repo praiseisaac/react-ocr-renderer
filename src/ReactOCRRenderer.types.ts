@@ -46,3 +46,16 @@ export type OCRBlockRenderProps = OCRBlock & {
   width: number
   height: number
 }
+
+export type OCRPageRenderProps = {
+  page: number
+  blocks?: OCRBlock[]
+  children: React.ReactNode
+}
+
+export type OCROverlayRendererProps = {
+  blocks: OCRBlock[]
+  customTextRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element
+  width: number
+  height: number
+}

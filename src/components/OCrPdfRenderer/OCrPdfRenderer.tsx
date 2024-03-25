@@ -1,28 +1,43 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { pdfjs, Document, Page } from 'react-pdf'
+import { Document, Page, pdfjs } from 'react-pdf'
+import {
+  OCRBlock,
+  OCRBlockRenderProps,
+  OCRPageRenderProps
+} from '../../ReactOCRRenderer.types'
+import DefaultPageRender from '../DefaultPageRender/DefaultPageRender'
+import OCROverlayRenderer from '../OCROverlayRenderer/OCROverlayRenderer'
 import styles from './OCRPdfRenderer.module.css'
-import DefaultTextRenderer from '../DefaultTextRender/DefaultTextRenderer'
-import { OCRBlock, OCRBlockRenderProps } from '../../ReactOCRRenderer.types'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
 
 const OCRPdfRenderer = ({
   file,
-  ocrData = {},
-  customRenderComponent
+  ocrData = [],
+  customTextRenderComponent,
+  customPageRenderComponent,
+  size = {
+    width: 500
+  },
+  showOnlyResultPages = false
 }: {
   file: string
   ocrData: {
     [key: number]: OCRBlock[]
   }
-  customRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element
+  customTextRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element
+  customPageRenderComponent?: (props: OCRPageRenderProps) => JSX.Element
+  size?: {
+    width: number
+  }
+  showOnlyResultPages?: boolean
 }) => {
   const [pages, setPages] = useState<string[]>([])
   const [{ width, height }, setPageSize] = useState<{
     width: number
     height: number
   }>({
-    width: 0,
+    width: size.width,
     height: 0
   })
 
@@ -56,7 +71,9 @@ const OCRPdfRenderer = ({
     handlePageLoad()
   }, [file, handlePageLoad])
 
-  const RenderText = customRenderComponent ?? DefaultTextRenderer
+  const RenderPage = customPageRenderComponent ?? DefaultPageRender
+
+  const rootList = Object.keys(showOnlyResultPages ? ocrData : pages)
 
   return (
     <Document
@@ -64,42 +81,40 @@ const OCRPdfRenderer = ({
       onLoadSuccess={(p) => {
         p.getPage(1).then((page) => {
           setPageSize({
-            width: page.view[2],
-            height: page.view[3]
+            width: width || size.width,
+            height: width * (page.view[3] / page.view[2])
           })
         })
       }}
     >
-      {pages.map((_, i) => (
-        <div
-          key={Math.random().toString(36).substring(7)}
-          className={styles.pageContainer}
-          style={{ width }}
-        >
-          <Page
-            renderTextLayer={false}
-            width={width}
-            pageNumber={i + 1}
-            renderAnnotationLayer={false}
-          />
-          <div className={styles.overlayContent}>
-            <div className={styles.ocrPage}>
-              {ocrData[i + 1]?.map((block) => (
-                <div
-                  key={block.Id}
-                  style={{
-                    left: `${block.Geometry.BoundingBox.Left * width}px`,
-                    top: `${block.Geometry.BoundingBox.Top * height}px`,
-                    position: 'absolute'
-                  }}
-                >
-                  <RenderText {...block} width={width} height={height} />
-                </div>
-              ))}
-            </div>
+      {rootList.map((pString) => {
+        const i = parseInt(pString, 10)
+
+        return (
+          <div
+            key={Math.random().toString(36).substring(7)}
+            className={styles.pageContainer}
+            style={{
+              width
+            }}
+          >
+            <RenderPage page={i} blocks={ocrData[i] ?? []}>
+              <Page
+                renderTextLayer={false}
+                width={width}
+                pageNumber={i}
+                renderAnnotationLayer={false}
+              />
+              <OCROverlayRenderer
+                blocks={ocrData[i] ?? []}
+                width={width}
+                height={height}
+                customTextRenderComponent={customTextRenderComponent}
+              />
+            </RenderPage>
           </div>
-        </div>
-      ))}
+        )
+      })}
     </Document>
   )
 }

@@ -1,20 +1,22 @@
 import React from 'react'
-import styles from './DefaultTextRenderer.module.css'
 import { OCRBlockRenderProps } from '../../ReactOCRRenderer.types'
+import styles from './DefaultTextRenderer.module.css'
 
 const DefaultTextRenderer = ({
   width,
   height,
   ...block
 }: OCRBlockRenderProps) => {
+  const defaultHeight = block.Geometry.BoundingBox.Height * height
+
   return (
     <div
       key={block.Id}
       className={styles.defaultRenderText}
       style={{
         width: `${block.Geometry.BoundingBox.Width * width}px`,
-        height: `${block.Geometry.BoundingBox.Height * height}px`,
-        fontSize: `calc(${block.Geometry.BoundingBox.Height * height}px * 0.8)`,
+        height: `${defaultHeight}px`,
+        fontSize: `calc(${defaultHeight}px * 0.8)`
       }}
     >
       {block.Text}
