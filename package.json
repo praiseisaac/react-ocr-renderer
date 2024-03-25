@@ -64,5 +64,10 @@
   },
   "dependencies": {
     "react-pdf": "^7.7.1"
-  }
+  },
+  "keywords": [
+    "react",
+    "ocr",
+    "renderer"
+  ],
 }
