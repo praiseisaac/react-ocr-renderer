@@ -2,6 +2,15 @@ export enum FileType {
   PDF = 'pdf'
 }
 
+export enum BlockType {
+  PAGE = 'PAGE',
+  LINE = 'LINE',
+  WORD = 'WORD',
+  TABLE = 'TABLE',
+  CELL = 'CELL',
+  SELECTION_ELEMENT = 'SELECTION_ELEMENT'
+}
+
 export type OCRBlock = {
   BlockType: BlockType
   Geometry: {
@@ -26,16 +35,14 @@ export type OCRBlock = {
   Text: string
 }
 
-export enum BlockType {
-  PAGE = 'PAGE',
-  LINE = 'LINE',
-  WORD = 'WORD',
-  TABLE = 'TABLE',
-  CELL = 'CELL',
-  SELECTION_ELEMENT = 'SELECTION_ELEMENT'
+export type OcrData = {
+  Blocks: OCRBlock[]
+  DocumentMetadata: {
+    Pages: number
+  }
 }
 
 export type OCRBlockRenderProps = OCRBlock & {
-  width: number;
-  height: number;
+  width: number
+  height: number
 }

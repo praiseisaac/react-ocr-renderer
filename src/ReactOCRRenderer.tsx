@@ -1,78 +1,74 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react'
 import {
   BlockType,
   FileType,
   OCRBlock,
   OCRBlockRenderProps,
-} from "./ReactOCRRenderer.types";
-import OCRPdfRenderer from './components/OCrPdfRenderer/OCrPdfRenderer';
+  OcrData
+} from './ReactOCRRenderer.types'
+import OCRPdfRenderer from './components/OCrPdfRenderer/OCrPdfRenderer'
 
 const groupPages = (blocks: OCRBlock[]) => {
   const pages: {
-    [key: number]: OCRBlock[];
-  } = {};
+    [key: number]: OCRBlock[]
+  } = {}
 
   blocks.forEach((block) => {
-    pages[block.Page] = pages[block.Page] || [];
+    pages[block.Page] = pages[block.Page] || []
 
-    pages[block.Page].push(block);
-  });
-  return pages;
-};
+    pages[block.Page].push(block)
+  })
+  return pages
+}
 
 const ReactOCRRenderer = ({
   file,
   type,
-  ocrJson,
+  ocrData,
   searchText = [],
   highlightedBlockTypes = [BlockType.WORD],
   customRenderComponent
-}:  {
-  file: string;
-  type: FileType;
-  ocrJson: {
-    Blocks: OCRBlock[];
-    DocumentMetadata: {
-      Pages: number;
-    };
-  };
-  searchText?: string[] | string;
-    highlightedBlockTypes?: BlockType[];
-    customRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element;
+}: {
+  file: string
+  type: FileType
+  ocrData: OcrData
+  searchText?: string[] | string
+  highlightedBlockTypes?: BlockType[]
+  customRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element
 }) => {
   const cleanedSearchText = useMemo(
     () =>
-      typeof searchText === "string"
+      typeof searchText === 'string'
         ? searchText.toLowerCase()
         : searchText.map((el) => el.toLowerCase()),
-    [searchText],
-  );
+    [searchText]
+  )
 
   const filteredBlocks = useMemo(
     () =>
-      ocrJson.Blocks.filter((block) => {
+      ocrData.Blocks.filter((block) => {
         if (!highlightedBlockTypes.includes(block.BlockType)) {
-          return false;
+          return false
         }
 
         const textCheck =
-          typeof cleanedSearchText === "string"
+          typeof cleanedSearchText === 'string'
             ? !block.Text.toLowerCase().includes(cleanedSearchText)
             : !cleanedSearchText.some((el) =>
-                !block.Text ? false : block.Text.toLowerCase().includes(el),
-              );
+                !block.Text ? false : block.Text.toLowerCase().includes(el)
+              )
 
         if (cleanedSearchText.length && textCheck) {
-          return false;
+          return false
         }
 
-        return true;
+        return true
       }),
-    [ocrJson, cleanedSearchText, highlightedBlockTypes],
-  );
+    [ocrData, cleanedSearchText, highlightedBlockTypes]
+  )
 
   if (type === FileType.PDF) {
-    const pageGroups = groupPages(filteredBlocks);
+    const pageGroups = groupPages(filteredBlocks)
 
     return (
       <OCRPdfRenderer
@@ -80,10 +76,10 @@ const ReactOCRRenderer = ({
         ocrData={pageGroups}
         customRenderComponent={customRenderComponent}
       />
-    );
+    )
   }
 
-  return <div>{file}</div>;
-};
+  return <div>{file}</div>
+}
 
-export default ReactOCRRenderer;
+export default ReactOCRRenderer

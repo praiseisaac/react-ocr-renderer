@@ -1,21 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { pdfjs, Document, Page } from 'react-pdf'
 import styles from './OCRPdfRenderer.module.css'
-import DefaultTextRenderer from '../DefaultTextRender/DefaultTextRenderer';
-import { OCRBlock, OCRBlockRenderProps } from '../../ReactOCRRenderer.types';
+import DefaultTextRenderer from '../DefaultTextRender/DefaultTextRenderer'
+import { OCRBlock, OCRBlockRenderProps } from '../../ReactOCRRenderer.types'
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
-
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
 
 const OCRPdfRenderer = ({
   file,
-  ocrData,
+  ocrData = {},
   customRenderComponent
 }: {
   file: string
   ocrData: {
     [key: number]: OCRBlock[]
-  },
+  }
   customRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element
 }) => {
   const [pages, setPages] = useState<string[]>([])
@@ -43,7 +42,7 @@ const OCRPdfRenderer = ({
           pageData
             .getTextContent()
             .then((textContent) =>
-              textContent.items.map(({ str }: any) => str).join(' ')
+              textContent.items.map((v) => (v as { str: string }).str).join(' ')
             )
         )
     )
@@ -57,10 +56,9 @@ const OCRPdfRenderer = ({
     handlePageLoad()
   }, [file, handlePageLoad])
 
-  const RenderText = customRenderComponent ?? DefaultTextRenderer;
+  const RenderText = customRenderComponent ?? DefaultTextRenderer
 
   return (
-    // @ts-ignore
     <Document
       file={file}
       onLoadSuccess={(p) => {
@@ -73,10 +71,11 @@ const OCRPdfRenderer = ({
       }}
     >
       {pages.map((_, i) => (
-        <div key={
-          Math.random().toString(36).substring(7)
-        } className={styles.pageContainer} style={{ width }}>
-          {/* @ts-ignore */}
+        <div
+          key={Math.random().toString(36).substring(7)}
+          className={styles.pageContainer}
+          style={{ width }}
+        >
           <Page
             renderTextLayer={false}
             width={width}
@@ -86,11 +85,14 @@ const OCRPdfRenderer = ({
           <div className={styles.overlayContent}>
             <div className={styles.ocrPage}>
               {ocrData[i + 1]?.map((block) => (
-                <div key={block.Id} style={{
-                  left: `${block.Geometry.BoundingBox.Left * width}px`,
-                  top: `${block.Geometry.BoundingBox.Top * height}px`,
-                  position: 'absolute',
-                }}>
+                <div
+                  key={block.Id}
+                  style={{
+                    left: `${block.Geometry.BoundingBox.Left * width}px`,
+                    top: `${block.Geometry.BoundingBox.Top * height}px`,
+                    position: 'absolute'
+                  }}
+                >
                   <RenderText {...block} width={width} height={height} />
                 </div>
               ))}

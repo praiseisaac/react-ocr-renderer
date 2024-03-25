@@ -18,13 +18,44 @@ import React, { Component } from 'react'
 import ReactOCRRenderer, { FileType, BlockType } from 'react-ocr-renderer'
 import 'react-ocr-renderer/dist/index.css'
 
+const ocrData = {
+  Blocks: [
+    {
+      BlockType: BlockType.LINE,
+      Geometry: {
+        BoundingBox: {
+          Width: 0.5,
+          Height: 0.1,
+          Left: 0.25,
+          Top: 0.3
+        },
+        Polygon: [
+          { X: 0.25, Y: 0.3 },
+          { X: 0.75, Y: 0.3 },
+          { X: 0.75, Y: 0.4 },
+          { X: 0.25, Y: 0.4 }
+        ]
+      },
+      Id: "1",
+      Relationships: [],
+      Page: 1,
+      Confidence: 99,
+      Text: "Sample text here"
+    }
+    // ...more blocks
+  ],
+  DocumentMetadata: {
+    Pages: 1
+  }
+}
+
 class Example extends Component {
   render() {
     return <ReactOCRRenderer
       file="path/to/file"
       type={FileType.PDF}
-      ocrJson={
-        ocrJson
+      ocrData={
+        ocrData
       }
       highlightedBlockTypes={[BlockType.LINE]}
     />
@@ -39,13 +70,45 @@ import React, { Component } from 'react'
 import ReactOCRRenderer, { FileType, BlockType } from 'react-ocr-renderer'
 import 'react-ocr-renderer/dist/index.css'
 
+
+const ocrData = {
+  Blocks: [
+    {
+      BlockType: BlockType.LINE,
+      Geometry: {
+        BoundingBox: {
+          Width: 0.5,
+          Height: 0.1,
+          Left: 0.25,
+          Top: 0.3
+        },
+        Polygon: [
+          { X: 0.25, Y: 0.3 },
+          { X: 0.75, Y: 0.3 },
+          { X: 0.75, Y: 0.4 },
+          { X: 0.25, Y: 0.4 }
+        ]
+      },
+      Id: "1",
+      Relationships: [],
+      Page: 1,
+      Confidence: 99,
+      Text: "Sample text here"
+    }
+    // ...more blocks
+  ],
+  DocumentMetadata: {
+    Pages: 1
+  }
+}
+
 class Example extends Component {
   render() {
     return <ReactOCRRenderer
       file="path/to/file"
       type={FileType.PDF}
-      ocrJson={
-        ocrJson
+      ocrData={
+        ocrData
       }
       highlightedBlockTypes={[BlockType.LINE]}
       searchText={"test to search"}
