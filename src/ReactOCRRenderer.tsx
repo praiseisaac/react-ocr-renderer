@@ -25,18 +25,24 @@ const groupPages = (blocks: OCRBlock[]) => {
 const ReactOCRRenderer = ({
   file,
   type,
-  ocrData,
+  ocrData = {
+    Blocks: [],
+    DocumentMetadata: {
+      Pages: 0
+    }
+  },
   searchText = [],
   highlightedBlockTypes = [BlockType.WORD],
   customTextRenderComponent,
   customPageRenderComponent,
   size,
-  showOnlyResultPages
+  showOnlyResultPages,
+  showOCROverlay
 }: {
   file: string
   type: FileType
   ocrData: OcrData
-  searchText?: string[] | string
+  searchText?: string[] | string | number
   highlightedBlockTypes?: BlockType[]
   customTextRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element
   customPageRenderComponent?: (props: OCRPageRenderProps) => JSX.Element
@@ -45,28 +51,49 @@ const ReactOCRRenderer = ({
     height?: number
   }
   showOnlyResultPages?: boolean
+  showOCROverlay?: boolean
 }) => {
-  const cleanedSearchText = useMemo(
-    () =>
-      typeof searchText === 'string'
-        ? searchText.toLowerCase()
-        : searchText.map((el) => el.toLowerCase()),
-    [searchText]
-  )
+  const { Blocks = [] } = ocrData || {
+    Blocks: [],
+    DocumentMetadata: {
+      Pages: 0
+    }
+  }
+
+  const cleanedSearchText = useMemo<string[]>(() => {
+    if (typeof searchText === 'string') {
+      return [searchText.toLowerCase()]
+    }
+
+    if (typeof searchText === 'number') {
+      return [searchText.toString()]
+    }
+
+    return searchText.map((el) => el.toString().toLowerCase())
+  }, [searchText])
 
   const filteredBlocks = useMemo(
     () =>
-      ocrData.Blocks.filter((block) => {
+      Blocks.filter((block) => {
         if (!highlightedBlockTypes.includes(block.BlockType)) {
           return false
         }
 
-        const textCheck =
-          typeof cleanedSearchText === 'string'
-            ? !block.Text.toLowerCase().includes(cleanedSearchText)
-            : !cleanedSearchText.some((el) =>
-                !block.Text ? false : block.Text.toLowerCase().includes(el)
-              )
+        let textCheck
+
+        if (typeof cleanedSearchText === 'string') {
+          textCheck = !block.Text.toLowerCase().includes(cleanedSearchText)
+        }
+
+        if (typeof cleanedSearchText === 'number') {
+          textCheck = !block.Text.toLowerCase().includes(`${cleanedSearchText}`)
+        }
+
+        if (Array.isArray(cleanedSearchText)) {
+          textCheck = !cleanedSearchText.some((el) =>
+            block.Text.toLowerCase().includes(`${el}`)
+          )
+        }
 
         if (cleanedSearchText.length && textCheck) {
           return false
@@ -78,11 +105,7 @@ const ReactOCRRenderer = ({
   )
 
   const pageGroups = useMemo(() => groupPages(filteredBlocks), [filteredBlocks])
-
-  if (!Object.keys(pageGroups).length) {
-    return <div>No data found</div>
-  }
-
+  console.log(searchText)
   if (type === FileType.PDF) {
     return (
       <OCRPdfRenderer
@@ -92,6 +115,7 @@ const ReactOCRRenderer = ({
         customPageRenderComponent={customPageRenderComponent}
         size={size}
         showOnlyResultPages={showOnlyResultPages}
+        showOCROverlay={showOCROverlay}
       />
     )
   }

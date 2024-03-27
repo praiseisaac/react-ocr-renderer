@@ -19,7 +19,8 @@ const OCRPdfRenderer = ({
   size = {
     width: 500
   },
-  showOnlyResultPages = false
+  showOnlyResultPages = false,
+  showOCROverlay = true
 }: {
   file: string
   ocrData: {
@@ -31,6 +32,7 @@ const OCRPdfRenderer = ({
     width: number
   }
   showOnlyResultPages?: boolean
+  showOCROverlay?: boolean
 }) => {
   const [pages, setPages] = useState<string[]>([])
   const [{ width, height }, setPageSize] = useState<{
@@ -105,12 +107,14 @@ const OCRPdfRenderer = ({
                 pageNumber={i}
                 renderAnnotationLayer={false}
               />
-              <OCROverlayRenderer
-                blocks={ocrData[i] ?? []}
-                width={width}
-                height={height}
-                customTextRenderComponent={customTextRenderComponent}
-              />
+              {showOCROverlay && (
+                <OCROverlayRenderer
+                  blocks={ocrData[i] ?? []}
+                  width={width}
+                  height={height}
+                  customTextRenderComponent={customTextRenderComponent}
+                />
+              )}
             </RenderPage>
           </div>
         )

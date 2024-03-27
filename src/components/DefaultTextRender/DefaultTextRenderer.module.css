@@ -1,14 +1,14 @@
 .defaultRenderText {
-  background-color: rgba(0, 0, 0, 1);
+  background-color: rgb(255, 243, 65);
   border-radius: 5px;
-  color: #fff;
+  color: #000;
   cursor: pointer;
-  font-size: 12px;
+  border: 2px solid black;
 
   &:hover {
-    opacity: 0.2;
-    color: #fff;
-    box-shadow: 0 0 5px #fff;
-    z-index: 3; 
+    opacity: 0.1;
+    color: #000;
+    box-shadow: 0 0 5px #000;
+    z-index: 3;
   }
 }

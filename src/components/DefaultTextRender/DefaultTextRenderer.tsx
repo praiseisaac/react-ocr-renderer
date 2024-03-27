@@ -7,16 +7,16 @@ const DefaultTextRenderer = ({
   height,
   ...block
 }: OCRBlockRenderProps) => {
-  const defaultHeight = block.Geometry.BoundingBox.Height * height
+  const defaultHeight = Math.max(15, block.Geometry.BoundingBox.Height * height)
 
   return (
     <div
       key={block.Id}
       className={styles.defaultRenderText}
       style={{
-        width: `${block.Geometry.BoundingBox.Width * width}px`,
-        height: `${defaultHeight}px`,
-        fontSize: `calc(${defaultHeight}px * 0.8)`
+        width: `${block.Geometry.BoundingBox.Width * width + 10}px`,
+        minHeight: `${defaultHeight + 4}px`,
+        fontSize: `calc(${defaultHeight}px * 0.7)`
       }}
     >
       {block.Text}
