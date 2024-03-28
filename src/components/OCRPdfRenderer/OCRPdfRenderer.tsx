@@ -94,7 +94,7 @@ const OCRPdfRenderer = ({
 
         return (
           <div
-            key={Math.random().toString(36).substring(7)}
+            key={`react-ocr-renderer-pdf-page-${i}`}
             className={styles.pageContainer}
             style={{
               width

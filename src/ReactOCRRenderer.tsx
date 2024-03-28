@@ -1,18 +1,18 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import {
   BlockType,
   FileType,
   OCRBlock,
   OCRBlockRenderProps,
+  OCRPageGroup,
   OCRPageRenderProps,
   OcrData
 } from './ReactOCRRenderer.types'
 import OCRPdfRenderer from './components/OCRPdfRenderer/OCRPdfRenderer'
+import { useReactOCRRenderer } from './contexts/ReactOcrRenderer.context'
 
 const groupPages = (blocks: OCRBlock[]) => {
-  const pages: {
-    [key: number]: OCRBlock[]
-  } = {}
+  const pages: OCRPageGroup = {}
 
   blocks.forEach((block) => {
     pages[block.Page] = pages[block.Page] || []
@@ -37,7 +37,8 @@ const ReactOCRRenderer = ({
   customPageRenderComponent,
   size,
   showOnlyResultPages,
-  showOCROverlay
+  showOCROverlay,
+  emptyComponent
 }: {
   file: string
   type: FileType
@@ -52,7 +53,10 @@ const ReactOCRRenderer = ({
   }
   showOnlyResultPages?: boolean
   showOCROverlay?: boolean
+  emptyComponent?: JSX.Element
 }) => {
+  const { pages: pageGroups, setPages, scrollToBlock } = useReactOCRRenderer()
+
   const { Blocks = [] } = ocrData || {
     Blocks: [],
     DocumentMetadata: {
@@ -72,8 +76,12 @@ const ReactOCRRenderer = ({
     return searchText.map((el) => el.toString().toLowerCase())
   }, [searchText])
 
-  const filteredBlocks = useMemo(
-    () =>
+  useEffect(() => {
+    if (!Blocks.length) {
+      return
+    }
+
+    const groupedPages = groupPages(
       Blocks.filter((block) => {
         if (!highlightedBlockTypes.includes(block.BlockType)) {
           return false
@@ -100,12 +108,19 @@ const ReactOCRRenderer = ({
         }
 
         return true
-      }),
-    [ocrData, cleanedSearchText, highlightedBlockTypes]
-  )
+      })
+    )
+    setPages(groupedPages)
+  }, [cleanedSearchText, Blocks, ...highlightedBlockTypes])
 
-  const pageGroups = useMemo(() => groupPages(filteredBlocks), [filteredBlocks])
-  console.log(searchText)
+  useEffect(() => {
+    scrollToBlock(0)
+  }, [pageGroups])
+
+  if (Object.keys(pageGroups).length === 0 && showOnlyResultPages) {
+    return emptyComponent ?? <div>No results found</div>
+  }
+
   if (type === FileType.PDF) {
     return (
       <OCRPdfRenderer

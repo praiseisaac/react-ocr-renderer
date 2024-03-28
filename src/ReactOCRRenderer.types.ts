@@ -45,6 +45,7 @@ export type OcrData = {
 export type OCRBlockRenderProps = OCRBlock & {
   width: number
   height: number
+  selected?: boolean
 }
 
 export type OCRPageRenderProps = {
@@ -58,4 +59,8 @@ export type OCROverlayRendererProps = {
   customTextRenderComponent?: (props: OCRBlockRenderProps) => JSX.Element
   width: number
   height: number
+}
+
+export type OCRPageGroup = {
+  [key: number]: OCRBlock[]
 }
