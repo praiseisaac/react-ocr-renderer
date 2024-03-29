@@ -128,6 +128,7 @@ const App = () => {
     <ReactOCRRenderer
       file="path/to/your/file.pdf"
       ocrData={ocrData}
+      type={FileType.PDF}
       customTextRenderComponent={CustomTextComponent}
       customPageRenderComponent={CustomPageComponent}
     />
@@ -152,6 +153,7 @@ const ContextCoveredExample = () => {
       <ReactOCRRenderer
         file="path/to/file.pdf"
         ocrData={/* Your OCR data */}
+        type={FileType.PDF}
         highlightedBlockTypes={[BlockType.LINE]}
       />
       <div>
