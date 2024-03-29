@@ -120,6 +120,51 @@ class Example extends Component {
 }
 ```
 
+Wrapping your component in `ReactOCRRendererContextProvider` will allow you to use methods like `nextBlock` and `prevBlock` from the `useReactOCRRenderer` hook for navigation.
+```tsx
+import React, { Component } from 'react'
+
+import ReactOCRRenderer, { FileType, BlockType, ReactOCRRendererContextProvider, useReactOCRRenderer} from 'react-ocr-renderer'
+import 'react-ocr-renderer/dist/index.css'
+
+
+const ContextCoveredExample = () => {
+  const {
+    nextBlock, prevBlock
+  } = useReactOCRRenderer()
+
+  render() {
+    return <div>
+      <ReactOCRRenderer
+        file="path/to/file"
+        type={FileType.PDF}
+        ocrData={
+          ocrData
+        }
+        highlightedBlockTypes={[BlockType.LINE]}
+        searchText={"test to search"}
+        {/* searchText={["text1", "text2"]} */}
+      />
+      <div>
+        <button onClick={nextBlock}>
+          next
+        </button>
+        <button onClick={prevBlock}>
+          next
+        </button>
+    </div>
+  }
+}
+
+export const App = () => {
+  
+  return <ReactOCRRendererContextProvider>
+    <ContextCoveredExample />
+  </ReactOCRRendererContextProvider>
+}
+```
+
+
 ## [To-Dos](https://praisedaramola.notion.site/ReactOCRRenderer-4d8b93487d0b438ca4d0a406158c819c)
 
 ## License
