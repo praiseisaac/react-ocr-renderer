@@ -1,6 +1,12 @@
+> This package is still in development, so the props and parameters will change, based on feedback or use cases.
+
 # React OCR Renderer
 
 The React OCR Renderer is a React library designed for rendering OCR (Optical Character Recognition) data on top of documents.
+
+# react-ocr-renderer
+
+[![NPM](https://img.shields.io/npm/v/react-ocr-renderer.svg)](https://www.npmjs.com/package/react-ocr-renderer) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Features
 
